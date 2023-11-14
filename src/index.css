@@ -15,3 +15,7 @@ code {
 :root {
   --width-outer: 1280px;
 }
+
+.text-center {
+  text-align: center;
+}

@@ -1,21 +1,62 @@
+import { useEffect, useState } from 'react';
 import styles from './app.module.css';
-import { data } from '../../data-types/data';
+//import { data } from '../../data-types/data';
 import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 
+const STATUS_OK = 200;
+const apiUrl = "https://norma.nomoreparties.space/api/ingredients";
+
+
 function App() {
-        return (
-            <>
-                <AppHeader/>
-                <main className={styles.main}>
-                    <div className={styles.inner}>
-                        <BurgerIngredients data={data}/>
-                        <BurgerConstructor data={data}/>
-                    </div>
-                </main>
-            </>
-        );
+
+    const [state, setState] = useState({ data: null, isLoading: true, isError: false });
+
+    useEffect(() => {
+        fetch(apiUrl)
+            .then(res => {
+                if (res.status !== STATUS_OK) {
+                    throw Error(`Неверный html-статус ответа: ${res.status}: ${res.statusText}`);
+                }
+                return res.json();
+            })
+            .then(res => {
+                if (!res.success) {
+                    throw Error('В json-ответе success !== true');
+                }
+                setState({ data: res.data, isLoading: false, isError: false });
+            })
+            .catch(err => {
+                console.log(err);
+                setState({ data: null, isLoading: false, isError: true });
+            });
+    }, []);
+
+    let waitMessage = null;
+    if (state.isLoading) {
+        waitMessage = "Подождите, идет загрузка...";
+    }
+    else if (state.isError) {
+        waitMessage = "Возникла ошибка при получении данных";
+    }
+
+    return (
+        <>
+            {waitMessage && <main className={styles.wait}><p className="text text_type_main-large">{waitMessage}</p></main>}
+            {!state.waitMessage && state.data && (
+                <>
+                    <AppHeader />
+                    <main className={styles.main}>
+                        <div className={styles.inner}>
+                            <BurgerIngredients data={state.data} />
+                            <BurgerConstructor data={state.data} />
+                        </div>
+                    </main>
+                </>
+            )}
+        </>
+    );
 }
 
 export default App;

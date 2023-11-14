@@ -1,4 +1,4 @@
-import React from 'react';
+import { useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import { BUN, SAUCE, MAIN, names } from '../../data-types/dataNames';
@@ -7,18 +7,18 @@ import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients
 import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item';
 
 function BurgerIngredients({ data }) {
-    const groups = React.useMemo(() => {
+    const groups = useMemo(() => {
         let res = {};
         res[BUN] = data.filter(i => i.type === BUN);
         res[SAUCE] = data.filter(i => i.type === SAUCE);
         res[MAIN] = data.filter(i => i.type === MAIN);
         return res;
     }, [data]);
-    
+
     const headers = {};
-    headers[BUN] = React.useRef(null);
-    headers[SAUCE] = React.useRef(null);
-    headers[MAIN] = React.useRef(null);
+    headers[BUN] = useRef(null);
+    headers[SAUCE] = useRef(null);
+    headers[MAIN] = useRef(null);
 
     function tabChange(value) {
         headers[value].current.scrollIntoView({ behavior: "smooth" });
@@ -35,10 +35,10 @@ function BurgerIngredients({ data }) {
                         <h2 className="text text_type_main-medium mt-2" ref={headers[type]}>{names[type]}</h2>
                         <ul className={styles['group-content']}>
                             {groups[type].map((item, index) => (
-                                <BurgerIngredientsItem title={item.name} price={item.price} img={item.image} key={type + index}/>
+                                <BurgerIngredientsItem key={type + index} item={item} count={index === 0 ? 1 : 0}/>
                             ))}
                         </ul>
-                    </div> 
+                    </div>
                 ))}
             </div>
         </section>

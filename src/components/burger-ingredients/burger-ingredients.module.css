@@ -6,7 +6,7 @@
     overflow-y: auto;
     max-height: 660px;
     scrollbar-color: #8585AD #2F2F37;
-	scrollbar-width: thin;
+    scrollbar-width: thin;
 }
 
 .list::-webkit-scrollbar {
@@ -39,13 +39,8 @@
 @media (max-height: 650px) {
     .list {
         max-height: 260px;
-    }    
+    }
 }
-
-.list :last-child {
-    margin-bottom: 0;
-}
-
 
 .group-content {
     display: flex;
