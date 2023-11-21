@@ -1,0 +1,58 @@
+import { useEffect, useState } from 'react';
+import styles from './app.module.css';
+//import { data } from '../../data-types/data';
+import AppHeader from '../app-header/app-header';
+import BurgerConstructor from '../burger-constructor/burger-constructor';
+import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+
+const apiUrl = "https://norma.nomoreparties.space/api/ingredients";
+
+
+function App() {
+
+    const [state, setState] = useState({ data: null, isLoading: true, isError: false });
+
+    useEffect(() => {
+        fetch(apiUrl)
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return Promise.reject(`Ошибка ${res.status}`);
+            })
+            .then(res => {
+                setState({ data: res.data, isLoading: false, isError: false });
+            })
+            .catch(err => {
+                console.error(err);
+                setState({ data: null, isLoading: false, isError: true });
+            });
+    }, []);
+
+    let waitMessage = null;
+    if (state.isLoading) {
+        waitMessage = "Подождите, идет загрузка...";
+    }
+    else if (state.isError) {
+        waitMessage = "Возникла ошибка при получении данных";
+    }
+
+    return (
+        <>
+            {waitMessage && <main className={styles.wait}><p className="text text_type_main-large">{waitMessage}</p></main>}
+            {!state.waitMessage && state.data && (
+                <>
+                    <AppHeader />
+                    <main className={styles.main}>
+                        <div className={styles.inner}>
+                            <BurgerIngredients data={state.data} />
+                            <BurgerConstructor data={state.data} />
+                        </div>
+                    </main>
+                </>
+            )}
+        </>
+    );
+}
+
+export default App;
