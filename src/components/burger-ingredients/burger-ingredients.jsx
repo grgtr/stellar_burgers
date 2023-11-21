@@ -6,6 +6,7 @@ import { dataPropTypes } from '../../data-types/dataPropTypes';
 import BurgerIngredientsTabs from '../burger-ingredients-tabs/burger-ingredients-tabs';
 import BurgerIngredientsItem from '../burger-ingredients-item/burger-ingredients-item';
 
+
 function BurgerIngredients({ data }) {
     const groups = useMemo(() => {
         let res = {};
@@ -24,18 +25,19 @@ function BurgerIngredients({ data }) {
         headers[value].current.scrollIntoView({ behavior: "smooth" });
     }
 
+
     return (
         <section className={styles.section}>
             <h1 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h1>
             <BurgerIngredientsTabs tabChange={tabChange} />
 
             <div className={styles.list}>
-                {[BUN, SAUCE, MAIN].map((type, typeIndex) => (
-                    <div key={typeIndex}>
+                {[BUN, SAUCE, MAIN].map((type) => (
+                    <div key={type}>
                         <h2 className="text text_type_main-medium mt-2" ref={headers[type]}>{names[type]}</h2>
                         <ul className={styles['group-content']}>
                             {groups[type].map((item, index) => (
-                                <BurgerIngredientsItem key={type + index} item={item} count={index === 0 ? 1 : 0}/>
+                                <BurgerIngredientsItem key={item._id} item={item} count={index === 0 ? 1 : 0}/>
                             ))}
                         </ul>
                     </div>

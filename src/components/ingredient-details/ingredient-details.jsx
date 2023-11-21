@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import styles from './ingredient-details.module.css';
-import Modal from '../modal/modal';
 import { dataPropTypes } from '../../data-types/dataPropTypes';
 
-function IngredientDetails({ item, onClose }) {
+function IngredientDetails({ item }) {
     return (
-        <Modal caption="Детали ингридиента" onClose={onClose}>
-            <img className={`${styles.image} mb-4`} src={item.image_large} alt="Изображение ингридиента" />
+        <>
+            <img className={`${styles.image} mb-4`} src={item.image_large} alt={item.name} />
             <p className={`${styles.name} text-center text text_type_main-medium mb-8`}>{item.name}</p>
             <div className={`${styles.detail} mb-15`}>
                 <div className={styles['detail-item']}>
@@ -26,7 +25,7 @@ function IngredientDetails({ item, onClose }) {
                     <div className="text-center text text_type_digits-default text_color_inactive">{item.carbohydrates}</div>
                 </div>
             </div>
-        </Modal>
+        </>
     );
 }
 

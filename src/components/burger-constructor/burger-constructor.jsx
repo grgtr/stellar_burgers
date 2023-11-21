@@ -46,7 +46,7 @@ function BurgerConstructor({ data }) {
                 />
             </div>
 
-            <BurgerConstructorOrder sum={sum} number="087" />
+            <BurgerConstructorOrder sum={sum} number="020087" />
         </section>
     );
 }

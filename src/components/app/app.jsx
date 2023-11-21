@@ -5,7 +5,6 @@ import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 
-const STATUS_OK = 200;
 const apiUrl = "https://norma.nomoreparties.space/api/ingredients";
 
 
@@ -16,19 +15,16 @@ function App() {
     useEffect(() => {
         fetch(apiUrl)
             .then(res => {
-                if (res.status !== STATUS_OK) {
-                    throw Error(`Неверный html-статус ответа: ${res.status}: ${res.statusText}`);
+                if (res.ok) {
+                    return res.json();
                 }
-                return res.json();
+                return Promise.reject(`Ошибка ${res.status}`);
             })
             .then(res => {
-                if (!res.success) {
-                    throw Error('В json-ответе success !== true');
-                }
                 setState({ data: res.data, isLoading: false, isError: false });
             })
             .catch(err => {
-                console.log(err);
+                console.error(err);
                 setState({ data: null, isLoading: false, isError: true });
             });
     }, []);

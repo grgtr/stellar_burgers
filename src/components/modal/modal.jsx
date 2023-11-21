@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import styles from './modal.module.css';
@@ -6,19 +6,20 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 
 function Modal({ caption, children, onClose }) {
-    const checkEsc = useCallback(e => {
-        if (e.key === "Escape") {
-            onClose(e);
-        }
-    }, [onClose]);
 
     useEffect(() => {
+        const checkEsc = (event) => {
+            if (event.key === "Escape") {
+                onClose(event);
+            }
+        };
+
         document.addEventListener("keydown", checkEsc, false);
 
         return () => {
             document.removeEventListener("keydown", checkEsc, false);
         };
-    }, [checkEsc]);
+    }, [onClose]);
 
     return ReactDOM.createPortal((
         <div className={styles.container}>
